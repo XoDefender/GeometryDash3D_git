@@ -8,15 +8,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpSpeed = 15f;
     [SerializeField] private float gravity = 15f;
     [SerializeField] private float maxJumpHeight = 10f;
-    
-    private float groundOffset = 0.05f;
+
+    private GameObject parent;
 
     private bool inJump = false;
     private bool isFalling = false;
+    private bool isOnGround;
 
     private Vector3 preJumpedPosition;
-
-    private GameObject parent;
 
     float timeElapsed;
     float lerpDuration = 1f;
@@ -31,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -44,11 +43,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJumping()
     {
-        float distanceToSurface = transform.localScale.y / 2 + groundOffset;
-
-        bool isOnGround = Physics.Raycast(transform.position, Vector3.down, distanceToSurface);
-
-        Debug.DrawRay(transform.position, Vector3.down * distanceToSurface, Color.green);
         if (isOnGround)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -67,8 +61,6 @@ public class PlayerMovement : MonoBehaviour
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, (timeElapsed / lerpDuration) * 0.05f);
 
                 timeElapsed += Time.deltaTime;
-
-                Debug.Log(transform.eulerAngles.z);
             }
 
             if (parent.transform.position.y <= preJumpedPosition.y + maxJumpHeight && !isFalling)
@@ -80,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
                 isFalling = true;
 
                 parent.transform.Translate(new Vector3(0, -gravity * Time.deltaTime, 0));
-
+                
                 if (isOnGround)
                 {
                     inJump = false;
@@ -90,5 +82,24 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+        else if(!inJump && !isOnGround)
+        {
+            parent.transform.Translate(new Vector3(0, -gravity * Time.deltaTime, 0));
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        isOnGround = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        isOnGround = false;
     }
 }
