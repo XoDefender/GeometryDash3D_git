@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isOnGround)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space))
             {
                 inJump = true;
                 preJumpedPosition = parent.transform.position;

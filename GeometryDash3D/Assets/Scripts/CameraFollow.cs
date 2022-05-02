@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
+    private GameObject player;
+    private const string playerName = "PlayerTrigger";
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.Find(playerName);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(player.transform.position);
+        float offsetX = -42f;
+        float offsetY = 10f;
+        float offsetZ = -50f;
+        transform.position = new Vector3(player.transform.position.x + offsetX, offsetY, player.transform.position.z + offsetZ);
     }
 }
