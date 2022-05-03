@@ -40,21 +40,15 @@ public class CameraFollow : MonoBehaviour
         {
             readyToMoveUp = true;
             currentPositionY += followUpOffstet;
-
-            Debug.Log("Ascent = " + currentTargetPositionY);
         }
         else if(player.transform.position.y <= currentPositionY - followUpOffstet)
         {
             readyToMoveDown = true;
             currentPositionY -= followUpOffstet;
-
-            Debug.Log("Descent = " + currentTargetPositionY);
         }
         else
         {
             transform.position = new Vector3(player.transform.position.x + offsetX, currentTargetPositionY, player.transform.position.z + offsetZ);
-
-            Debug.Log("Out");
         }
 
         if(readyToMoveUp)

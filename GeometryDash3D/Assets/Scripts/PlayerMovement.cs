@@ -90,11 +90,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        Vector3 tempPosition = parent.transform.position;
+        tempPosition.y = other.transform.position.y + (other.transform.lossyScale.y / 2) + (transform.lossyScale.y / 2 - 0.1f);
+
+        parent.transform.position = tempPosition;
     }
 
     private void OnTriggerStay(Collider other)
-    {
+    { 
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
         isOnGround = true;
     }
 
