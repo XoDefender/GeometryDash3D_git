@@ -36,50 +36,53 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player.transform.position.y >= currentPositionY + followUpOffstet)
+        if(player)
         {
-            readyToMoveUp = true;
-            currentPositionY += followUpOffstet;
-
-            Debug.Log("Ascent = " + currentTargetPositionY);
-        }
-        else if(player.transform.position.y <= currentPositionY - followUpOffstet)
-        {
-            readyToMoveDown = true;
-            currentPositionY -= followUpOffstet;
-
-            Debug.Log("Descent = " + currentTargetPositionY);
-        }
-        else
-        {
-            transform.position = new Vector3(player.transform.position.x + offsetX, currentTargetPositionY, player.transform.position.z + offsetZ);
-
-            Debug.Log("Out");
-        }
-
-        if(readyToMoveUp)
-        {
-            if (currentTargetPositionY < previousTargetPositionY + ascentStep)
+            if (player.transform.position.y >= currentPositionY + followUpOffstet)
             {
-                currentTargetPositionY += 0.1f;
+                readyToMoveUp = true;
+                currentPositionY += followUpOffstet;
+
+                Debug.Log("Ascent = " + currentTargetPositionY);
+            }
+            else if (player.transform.position.y <= currentPositionY - followUpOffstet)
+            {
+                readyToMoveDown = true;
+                currentPositionY -= followUpOffstet;
+
+                Debug.Log("Descent = " + currentTargetPositionY);
             }
             else
             {
-                readyToMoveUp = false;
-                previousTargetPositionY = currentTargetPositionY;
-            }
-        }
+                transform.position = new Vector3(player.transform.position.x + offsetX, currentTargetPositionY, player.transform.position.z + offsetZ);
 
-        if (readyToMoveDown)
-        {
-            if (currentTargetPositionY > previousTargetPositionY - descentStep)
-            {
-                currentTargetPositionY -= 0.1f;
+                Debug.Log("Out");
             }
-            else
+
+            if (readyToMoveUp)
             {
-                readyToMoveDown = false;
-                previousTargetPositionY = currentTargetPositionY;
+                if (currentTargetPositionY < previousTargetPositionY + ascentStep)
+                {
+                    currentTargetPositionY += 0.1f;
+                }
+                else
+                {
+                    readyToMoveUp = false;
+                    previousTargetPositionY = currentTargetPositionY;
+                }
+            }
+
+            if (readyToMoveDown)
+            {
+                if (currentTargetPositionY > previousTargetPositionY - descentStep)
+                {
+                    currentTargetPositionY -= 0.1f;
+                }
+                else
+                {
+                    readyToMoveDown = false;
+                    previousTargetPositionY = currentTargetPositionY;
+                }
             }
         }
     }
