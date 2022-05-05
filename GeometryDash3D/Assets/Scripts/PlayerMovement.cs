@@ -8,12 +8,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpSpeed = 15f;
     [SerializeField] private float gravity = 15f;
     [SerializeField] private float maxJumpHeight = 10f;
+    [SerializeField] private LayerMask layerMask;
 
     private GameObject parent;
 
     private bool inJump = false;
     private bool isFalling = false;
     private bool isOnGround;
+    private bool[] groundCheck = new bool[2];
 
     private Vector3 preJumpedPosition;
 
@@ -36,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        GroundChecking();
         HandleJumping();
 
         parent.transform.Translate(new Vector3(movementSpeed * Time.deltaTime, 0, 0));
@@ -43,6 +46,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJumping()
     {
+        if (groundCheck[0] || groundCheck[1])
+        {
+            isOnGround = true;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            isOnGround = false;
+        }
+
         if (isOnGround)
         {
             if (Input.GetKey(KeyCode.Space))
@@ -88,23 +101,18 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void GroundChecking()
     {
-        Vector3 tempPosition = parent.transform.position;
-        tempPosition.y = other.transform.position.y + (other.transform.lossyScale.y / 2) + (transform.lossyScale.y / 2 - 0.1f);
+        Vector3 firstRayPosition = transform.position;
+        firstRayPosition.x += 1.5f;
 
-        parent.transform.position = tempPosition;
-    }
+        Vector3 secondRayPosition = transform.position;
+        secondRayPosition.x -= 1.5f;
 
-    private void OnTriggerStay(Collider other)
-    { 
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        Debug.DrawRay(firstRayPosition, Vector3.down * 1.6f, Color.green);
+        Debug.DrawRay(secondRayPosition, Vector3.down * 1.6f, Color.red);
 
-        isOnGround = true;
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        isOnGround = false;
+        groundCheck[0] = Physics.Raycast(firstRayPosition, Vector3.down, 1.6f, layerMask);
+        groundCheck[1] = Physics.Raycast(secondRayPosition, Vector3.down, 1.6f, layerMask);
     }
 }
