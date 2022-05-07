@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float movementSpeed = 10f;
+    [SerializeField] private float movementSpeed = 20f;
     [SerializeField] private float jumpSpeed = 15f;
     [SerializeField] private float gravity = 15f;
     [SerializeField] private float maxJumpHeight = 10f;
-    [SerializeField] private LayerMask layerMask;
 
     private GameObject parent;
+    private CollisionDetection collisionDetection;
 
     private bool inJump = false;
     private bool isFalling = false;
-    private bool isOnGround;
-    private bool[] groundCheck = new bool[2];
 
     private Vector3 preJumpedPosition;
 
@@ -27,18 +25,12 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         parent = transform.parent.gameObject;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
+        collisionDetection = GetComponent<CollisionDetection>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        GroundChecking();
         HandleJumping();
 
         parent.transform.Translate(new Vector3(movementSpeed * Time.deltaTime, 0, 0));
@@ -46,17 +38,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleJumping()
     {
-        if (groundCheck[0] || groundCheck[1])
+        if (collisionDetection.groundCheck[0] || collisionDetection.groundCheck[1])
         {
-            isOnGround = true;
+            collisionDetection.isOnGround = true;
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else
         {
-            isOnGround = false;
+            collisionDetection.isOnGround = false;
         }
 
-        if (isOnGround)
+        if (collisionDetection.isOnGround)
         {
             if (Input.GetKey(KeyCode.Space))
             {
@@ -86,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
 
                 parent.transform.Translate(new Vector3(0, -gravity * Time.deltaTime, 0));
                 
-                if (isOnGround)
+                if (collisionDetection.isOnGround)
                 {
                     inJump = false;
                     isFalling = false;
@@ -95,21 +87,9 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
-        else if(!inJump && !isOnGround)
+        else if(!inJump && !collisionDetection.isOnGround)
         {
             parent.transform.Translate(new Vector3(0, -gravity * Time.deltaTime, 0));
         }
-    }
-
-    private void GroundChecking()
-    {
-        Vector3 firstRayPosition = transform.position;
-        firstRayPosition.x += 1.5f;
-
-        Vector3 secondRayPosition = transform.position;
-        secondRayPosition.x -= 1.5f;
-
-        groundCheck[0] = Physics.Raycast(firstRayPosition, Vector3.down, 1.6f, layerMask);
-        groundCheck[1] = Physics.Raycast(secondRayPosition, Vector3.down, 1.6f, layerMask);
     }
 }

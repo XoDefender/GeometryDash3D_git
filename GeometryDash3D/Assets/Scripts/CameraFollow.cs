@@ -5,11 +5,11 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     private GameObject player;
-    private const string playerName = "PlayerTrigger";
+    private const string playerName = "PlayerBody";
 
-    private float offsetX = -42f;
-    private float offsetY = 10f;
-    private float offsetZ = -50f;
+    private float offsetX = -1f;
+    private float offsetY = 8f;
+    private float offsetZ = -23f;
 
     private float followUpOffstet = 10f;
 
@@ -31,6 +31,8 @@ public class CameraFollow : MonoBehaviour
         currentTargetPositionY = offsetY;
         previousTargetPositionY = offsetY;
         currentPositionY = player.transform.position.y;
+
+        transform.rotation = Quaternion.Euler(0, 18f, 0);
     }
 
     // Update is called once per frame
@@ -42,21 +44,15 @@ public class CameraFollow : MonoBehaviour
             {
                 readyToMoveUp = true;
                 currentPositionY += followUpOffstet;
-
-                Debug.Log("Ascent = " + currentTargetPositionY);
             }
             else if (player.transform.position.y <= currentPositionY - followUpOffstet)
             {
                 readyToMoveDown = true;
                 currentPositionY -= followUpOffstet;
-
-                Debug.Log("Descent = " + currentTargetPositionY);
             }
             else
             {
                 transform.position = new Vector3(player.transform.position.x + offsetX, currentTargetPositionY, player.transform.position.z + offsetZ);
-
-                Debug.Log("Out");
             }
 
             if (readyToMoveUp)
