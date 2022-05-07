@@ -11,7 +11,7 @@ public class CameraFollow : MonoBehaviour
     private float offsetY = 10f;
     private float offsetZ = -50f;
 
-    private float followUpOffstet = 7f;
+    private float followUpOffstet = 10f;
 
     private float ascentStep = 5f;
     private float descentStep = 5f;
