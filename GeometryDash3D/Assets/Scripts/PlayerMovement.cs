@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
                 inJump = true;
                 preJumpedPosition = parent.transform.position;
 
-                targetRotation = Quaternion.Euler(transform.eulerAngles + Vector3.forward * 180.1f);
+                targetRotation = Quaternion.Euler(transform.eulerAngles + Vector3.forward * -90.1f);
             }
         }
 
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (timeElapsed < lerpDuration)
             {
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, (timeElapsed / lerpDuration) * 0.05f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, (timeElapsed / lerpDuration) * 0.15f);
 
                 timeElapsed += Time.deltaTime;
             }

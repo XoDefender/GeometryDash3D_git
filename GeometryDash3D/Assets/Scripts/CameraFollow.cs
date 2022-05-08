@@ -9,7 +9,7 @@ public class CameraFollow : MonoBehaviour
 
     private float offsetX = -1f;
     private float offsetY = 8f;
-    private float offsetZ = -23f;
+    private float offsetZ = -25f;
 
     private float followUpOffstet = 10f;
 
@@ -23,11 +23,14 @@ public class CameraFollow : MonoBehaviour
     private float previousTargetPositionY;
     private float currentPositionY;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         player = GameObject.Find(playerName);
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    { 
         currentTargetPositionY = offsetY;
         previousTargetPositionY = offsetY;
         currentPositionY = player.transform.position.y;
